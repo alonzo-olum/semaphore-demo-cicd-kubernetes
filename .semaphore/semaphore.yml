@@ -12,8 +12,7 @@ blocks:
           commands:
             - checkout
             - docker login \
-            - ' -u $DOCKER_USERNAME \'
-            - ' -p $DOCKER_PASSWORD'
+            - ' -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
             - docker pull \
             - ' $DOCKER_USERNAME/demo:latest || true'
             - docker build \
@@ -21,6 +20,8 @@ blocks:
             - ' -t $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID .'
             - docker push \
             - ' $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID'
+      secrets:
+        - name: dockerhub
   - name: Test
     task:
       prologue:
@@ -52,14 +53,15 @@ blocks:
             - docker run --net=host -it \
             - ' $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID \'
             - ' npm run test'
+      secrets:
+        - name: dockerhub
   - name: Push
     task:
       jobs:
         - name: Push
           commands:
             - docker login \
-            - ' -u $DOCKER_USERNAME \'
-            - ' -p $DOCKER_PASSWORD'
+            - ' -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
             - docker pull \
             - ' $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID'
             - docker tag \
@@ -67,3 +69,5 @@ blocks:
             - ' $DOCKER_USERNAME/demo:latest'
             - docker push \
             - ' $DOCKER_USERNAME/demo:latest'
+      secrets:
+        - name: dockerhub
