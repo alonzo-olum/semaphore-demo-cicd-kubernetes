@@ -11,9 +11,10 @@ blocks:
         - name: docker build
           commands:
             - checkout
-            - docker login --username="$DOCKER_USERNAME" \
-            - ' --password="$DOCKER_PASSWORD" \'
-            - ' https://index.docker.io/v1'
+            - docker login \
+            - ' -u $DOCKER_USERNAME \'
+            - ' -p $DOCKER_PASSWORD \'
+            - ' $DOCKER_REGISTRY_URL'
             - docker pull \
             - ' $DOCKER_USERNAME/demo:latest || true'
             - docker build \
