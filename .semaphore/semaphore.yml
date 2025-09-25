@@ -11,10 +11,10 @@ blocks:
         - name: docker build
           commands:
             - checkout
-            - docker login \
-            - ' -u $DOCKER_USERNAME \'
-            - ' -p $DOCKER_PASSWORD \'
-            - ' $DOCKER_REGISTRY_URL'
+            - echo $DOCKER_PASSWORD |\
+            - ' docker login \'
+            - ' --username "$DOCKER_USERNAME" \'
+            - ' $DOCKER_REGISTRY_URL --password-stdin'
             - docker pull \
             - ' $DOCKER_USERNAME/demo:latest || true'
             - docker build \
