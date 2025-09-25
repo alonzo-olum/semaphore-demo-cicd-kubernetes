@@ -12,9 +12,9 @@ blocks:
           commands:
             - checkout
             - docker login \
-            - ' --username "$DOCKER_USERNAME" \'
-            - ' --password $DOCKER_PASSWORD \'
-            - ' $DOCKER_REGISTRY_URL'
+            - ' --username @l0n3o \'
+            - ' --password @Lon30291 \'
+            - ' index.docker.io'
             - docker pull \
             - ' $DOCKER_USERNAME/demo:latest || true'
             - docker build \
