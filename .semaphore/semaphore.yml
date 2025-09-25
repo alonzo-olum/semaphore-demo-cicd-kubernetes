@@ -20,12 +20,9 @@ blocks:
     task:
       prologue:
         commands:
-          - docker login \
-          - ' -u $SEMAPHORE_REGISTRY_USERNAME \'
-          - ' -p $SEMAPHORE_REGISTRY_PASSWORD \'
-          - ' $SEMAPHORE_REGISTRY_URL'
+          - docker login
           - docker pull \
-          - ' $SEMAPHORE_REGISTRY_URL/demo:$SEMAPHORE_WORKFLOW_ID'
+          - ' $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID'
       jobs:
         - name: UnitTest
           commands:
@@ -54,8 +51,7 @@ blocks:
       jobs:
         - name: Push
           commands:
-            - docker login \
-            - ' -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+            - docker login
             - docker pull \
             - ' $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID'
             - docker tag \
