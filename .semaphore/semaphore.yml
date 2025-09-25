@@ -51,8 +51,7 @@ blocks:
       jobs:
         - name: Push
           commands:
-            - docker login \
-            - ' -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+            - docker login
             - docker pull \
             - ' $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID'
             - docker tag \
