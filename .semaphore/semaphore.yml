@@ -12,8 +12,7 @@ blocks:
           commands:
             - checkout
             - docker login
-            - 'docker build --cache-from $DOCKER_USERNAME/demo:latest \'
-            - ' -t $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID .'
+            - 'docker build -t $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID .'
             - 'docker push $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID'
       secrets:
         - name: dockerhub
