@@ -12,10 +12,8 @@ blocks:
           commands:
             - checkout
             - docker login
-            - docker build \
-            - ' -t $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID .'
-            - docker push \
-            - ' $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID'
+            - 'docker build -t $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID .'
+            - 'docker push $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID'
       secrets:
         - name: dockerhub
   - name: Test
@@ -25,28 +23,23 @@ blocks:
       prologue:
         commands:
           - docker login
-          - docker pull \
-          - ' $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID'
+          - 'docker pull $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID'
       jobs:
         - name: Unit Test
           commands:
-            - docker run -it \
-            - ' $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID \'
+            - 'docker run -it $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID \'
             - ' npm run lint'
         - name: Functional Test
           commands:
             - sem-service start postgres
-            - docker run --net=host -it \
-            - ' $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID \'
+            - 'docker run --net=host -it $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID \'
             - ' npm run ping'
-            - docker run --net=host -it \
-            - ' $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID \'
+            - 'docker run --net=host -it $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID \'
             - ' npm run migrate'
         - name: Integration Test
           commands:
             - sem-service start postgres
-            - docker run --net=host -it \
-            - ' $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID \'
+            - 'docker run --net=host -it $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID \'
             - ' npm run test'
   - name: Push
     task:
@@ -56,10 +49,7 @@ blocks:
         - name: Push
           commands:
             - docker login
-            - docker pull \
-            - ' $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID'
-            - docker tag \
-            - ' $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID \'
+            - 'docker pull $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID'
+            - 'docker tag $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID \'
             - ' $DOCKER_USERNAME/demo:latest'
-            - docker push \
-            - ' $DOCKER_USERNAME/demo:latest'
+            - 'docker push $DOCKER_USERNAME/demo:latest'
