@@ -11,8 +11,9 @@ blocks:
         - name: docker build
           commands:
             - checkout
-            - docker login
-            - 'docker build -t $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID .'
+            - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+            - 'docker pull $DOCKER_USERNAME/demo:latest || true'
+            - 'docker build --cache-from $DOCKER_USERNAME/demo:latest -t $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID .'
             - 'docker push $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID'
       secrets:
         - name: dockerhub
@@ -22,7 +23,7 @@ blocks:
         - name: dockerhub
       prologue:
         commands:
-          - docker login
+          - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
           - 'docker pull $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID'
       jobs:
         - name: Unit Test
@@ -44,7 +45,7 @@ blocks:
       jobs:
         - name: Push
           commands:
-            - docker login
+            - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
             - 'docker pull $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID'
             - 'docker tag $DOCKER_USERNAME/demo:$SEMAPHORE_WORKFLOW_ID $DOCKER_USERNAME/demo:latest'
             - 'docker push $DOCKER_USERNAME/demo:latest'
